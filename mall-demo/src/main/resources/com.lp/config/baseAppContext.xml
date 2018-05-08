@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+  http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+  http://www.springframework.org/schema/jdbc
+  http://www.springframework.org/schema/jdbc/spring-jdbc-3.1.xsd
+  http://www.springframework.org/schema/context
+  http://www.springframework.org/schema/context/spring-context-3.1.xsd
+  http://www.springframework.org/schema/tx
+  http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+
+    <!-- ######################################################################################### -->
+    <!--                                   Context Configurations                                  -->
+    <!-- ######################################################################################### -->
+
+    <!-- Property placeholders for dataSource definition -->
+    <context:property-placeholder location="file:${app.home}/${app.confPath}/server.conf"/>
+
+    <!-- ######################################################################################### -->
+    <!--                                        Data Source                                        -->
+    <!-- ######################################################################################### -->
+
+    <!-- JDBC Data Source -->
+    <!--<bean id="dataSource" class="com.lst.startup.db.AdaptableDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="maxActive" value="10"/>
+        <property name="maxIdle" value="10"/>
+        <property name="minIdle" value="0"/>
+        <property name="maxWait" value="30000"/>
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+    </bean>-->
+
+    <!-- Database Initialization -->
+    <!--<bean id="databaseInitializer" class="com.lst.startup.db.DatabaseInitializer">
+        <property name="scriptLocations" value="classpath:com/lst/mail/db/,classpath:com/lst/rpt/db/,classpath:com/lst/bpm/db/,classpath:com/lst/state/db/,classpath:com/lst/ebpm/db/,classpath:com/lst/sys/db/,classpath:com/lst/pat/db/,classpath:com/lst/cr/db/,classpath:com/lst/tm/db/,classpath:com/lst/custom/db/"/>
+    </bean>-->
+
+    <!-- ######################################################################################### -->
+    <!--                           Session Factory and Transaction Manager                         -->
+    <!-- ######################################################################################### -->
+
+    <!-- Hibernate Session Factory -->
+    <!--<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean"
+          depends-on="databaseInitializer">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.lp.**.entity"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+                <prop key="hibernate.show_sql">${hibernate.showSql}</prop>
+                <prop key="hibernate.format_sql">${hibernate.formatSql}</prop>
+                <prop key="hibernate.search.default.directory_provider">filesystem</prop>
+                <prop key="hibernate.search.default.indexBase">#{systemProperties['app.home']}/target/indexes</prop>
+                <prop key="hibernate.search.lucene_version">LUCENE_35</prop>
+                <prop key="hibernate.cache.use_query_cache">true</prop>
+                <prop key="hibernate.cache.use_second_level_cache">true</prop>
+                <prop key="hibernate.autoReconnect">true</prop>
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.integration.envers.enabled">false</prop>
+                <prop key="hibernate.id.new_generator_mappings">false</prop>
+                <prop key="org.hibernate.envers.default_catalog">esmlog</prop>
+                <prop key="org.hibernate.envers.audit_table_prefix">LOG_</prop>
+            </props>
+        </property>
+    </bean>-->
+
+    <!-- Hibernate Transaction Manager -->
+   <!-- <bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>-->
+
+    <!-- Exception translation post processor for DAO beans which has @Repository annotation -->
+    <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+    <!-- ######################################################################################### -->
+    <!--                                DAO Context Configurations                                 -->
+    <!-- ######################################################################################### -->
+
+    <!-- Auto scan components in classpath -->
+    <context:component-scan base-package="com.lp" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
+    </context:component-scan>
+
+    <!-- ######################################################################################### -->
+    <!--                        Platform Components Context Configurations                         -->
+    <!-- ######################################################################################### -->
+
+    <!-- Auto scan components in classpath -->
+    <context:component-scan base-package="com.lp" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
+    </context:component-scan>
+
+    <!-- Annotation Driven Transaction Manager Configurations -->
+    <!--<tx:annotation-driven transaction-manager="txManager"/>-->
+
+
+    <!-- Exception translation post processor for SVC beans which has @Component annotation -->
+    <!--<bean class="com.lst.startup.common.ServiceExceptionTranslationPostProcessor"/>
+    <bean id="serviceBeanFactory" class="com.lst.sys.common.BeanFactory" lazy-init="false" />-->
+
+</beans>
